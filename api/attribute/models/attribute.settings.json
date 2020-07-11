@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "attributes",
+  "info": {
+    "name": "Attribute"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "recipes": {
+      "via": "attribute",
+      "collection": "recipe",
+      "dominant": true
+    }
+  }
+}
