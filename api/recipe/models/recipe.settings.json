@@ -11,7 +11,8 @@
   "attributes": {
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "unique": true
     },
     "description": {
       "type": "richtext",
