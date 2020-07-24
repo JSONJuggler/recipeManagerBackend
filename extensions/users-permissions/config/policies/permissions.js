@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const jwt = require("jsonwebtoken");
 
 module.exports = async (ctx, next) => {
   let role;
@@ -8,7 +9,7 @@ module.exports = async (ctx, next) => {
       const { id, isAdmin = false } = await strapi.plugins[
         "users-permissions"
       ].services.jwt.getToken(ctx);
-      console.log(isAdmin);
+
       if (id === undefined) {
         throw new Error("Invalid token: Token did not contain required fields");
       }
@@ -26,15 +27,37 @@ module.exports = async (ctx, next) => {
       // admins shouldnt end up here as they change things from the admin dashboard and
       // wont be getting non strapi jwts as those only come from the callbacks that are
       // fired off when using the actualy app on the front end
+      // Verify token
+
+      try {
+        // decode the token
+        const decoded = jwt.verify(
+          ctx.request.header.authorization.split(" ")[1],
+          process.env.SECRET
+        );
+        id = decoded.id;
+        if (id === undefined) {
+          throw new Error(
+            "Invalid token: Token did not contain required fields"
+          );
+        }
+      } catch (err) {
+        throw new Error("Invalid token");
+      }
+
       ctx.state.user = await strapi
         .query("user", "users-permissions")
-        .findOne({ id: "5f0901d4b324e22c15564c6c" }, ["role"]);
+        .findOne({ id }, ["role"]);
+
+      if (!ctx.state.user) {
+        return handleErrors(ctx, "User Not Found", "unauthorized");
+      }
 
       // Retrieve `public` role.
       if (!role) {
         role = await strapi
           .query("role", "users-permissions")
-          .findOne({ type: "public" }, []);
+          .findOne({ type: "authenticated" }, []);
       }
 
       const route = ctx.request.route;
