@@ -55,9 +55,9 @@
       "via": "recipes"
     },
     "user": {
+      "via": "recipes",
       "plugin": "users-permissions",
-      "model": "user",
-      "via": "recipes"
+      "model": "user"
     }
   }
 }

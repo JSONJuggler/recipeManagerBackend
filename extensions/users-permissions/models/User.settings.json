@@ -68,8 +68,8 @@
       "required": false
     },
     "recipes": {
-      "via": "user",
-      "collection": "recipe"
+      "collection": "recipe",
+      "via": "user"
     }
   }
 }
