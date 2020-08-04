@@ -22,10 +22,6 @@
       "type": "richtext",
       "required": true
     },
-    "created": {
-      "type": "date",
-      "required": true
-    },
     "status": {
       "type": "enumeration",
       "enum": [
@@ -55,9 +51,9 @@
       "via": "recipes"
     },
     "user": {
-      "via": "recipes",
       "plugin": "users-permissions",
-      "model": "user"
+      "model": "user",
+      "via": "recipes"
     }
   }
 }
